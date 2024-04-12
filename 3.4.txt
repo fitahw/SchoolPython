@@ -1,0 +1,51 @@
+import random
+from time import sleep
+
+def printBoard(board):
+    for row in board:
+        print(" ".join(row))
+
+def spawnEnemy(size):
+    return random.randint(0, size-1), random.randint(0, size-1)
+
+def main():
+    print("Witamy na morzu!")
+    sleep(2)
+    print("Wartosci strzalow w plansze podawaj w zakresie (0-4)")
+    sleep(2)
+    print("Powodzenia!")
+    board_size = 5
+    ammo = 6
+
+    board = [["O"] * board_size for _ in range(board_size)]
+
+    enemy_ships = [spawnEnemy(board_size) for _ in range(3)]
+
+    for attempt in range(0, ammo):
+        print(f"\nStrzal {attempt}/{ammo}")
+        printBoard(board)
+
+        guess_row = int(input("Podaj wiersz: "))
+        guess_col = int(input("Podaj kolumne: "))
+
+        if (guess_row, guess_col) in enemy_ships:
+            print("Trafiony!")
+            board[guess_row][guess_col] = "X"
+            enemy_ships.remove((guess_row, guess_col))
+        else:
+            try:
+                print("Pudło!")
+                board[guess_row][guess_col] = "M"
+            except ValueError:
+                print("Wprowadź poprawne liczby!")
+            except IndexError:
+                print("Wprowadz poprawne liczby!")
+
+        if not enemy_ships:
+            print("\nGzwyciestwo!")
+            break
+
+    print(f"\nPrzegrales :-(\nPozostali wrogowie: {enemy_ships}")
+
+if __name__ == "__main__":
+    main()
